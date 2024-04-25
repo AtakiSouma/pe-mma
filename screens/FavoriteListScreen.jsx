@@ -17,7 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { showInfoRemoveToast, showSuccessToast } from "../components/Toast";
 import Dialog from "react-native-dialog";
 
-const FavoriteList = () => {
+const FavoriteList = ({ navigation }) => {
   const [data, setData] = useState(Categories);
   const [bookmarks, setBookmarks] = useState([]);
   const [bookmarksData, setBookmarksData] = useState([]);
@@ -101,7 +101,11 @@ const FavoriteList = () => {
       <View>
         {bookmarksData.length === 0 ? (
           <View
-            style={{marginTop:300 ,alignItems: "center", justifyContent: "center" }}
+            style={{
+              marginTop: 300,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
             <Text>No Items in WishList Screen</Text>
           </View>
@@ -110,18 +114,22 @@ const FavoriteList = () => {
             data={bookmarksData}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => (
-              <View style={globalStyles.card}>
-                <View style={styles.row}>
-                  <Image source={{ uri: item.image }} style={styles.image} />
-                  <Text style={{ fontSize: 15 }}>{item.name}</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("DetailScreen", { item })}
+              >
+                <View style={globalStyles.card}>
+                  <View style={styles.row}>
+                    <Image source={{ uri: item.image }} style={styles.image} />
+                    <Text style={{ fontSize: 15 }}>{item.name}</Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleDeleteItem(item.name)}
+                    style={{ position: "absolute", bottom: 10, right: 10 }}
+                  >
+                    <Text>Delete</Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                  onPress={() => handleDeleteItem(item.name)}
-                  style={{ position: "absolute", bottom: 10, right: 10 }}
-                >
-                  <Text>Delete</Text>
-                </TouchableOpacity>
-              </View>
+              </TouchableOpacity>
             )}
           />
         )}

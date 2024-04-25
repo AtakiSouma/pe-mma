@@ -20,8 +20,13 @@ import { useFocusEffect } from "@react-navigation/native";
 import { showInfoRemoveToast, showSuccessToast } from "../components/Toast";
 const HomeScreen = ({ navigation }) => {
   const [data, setData] = useState(Categories);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  // TODO:function
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  // TODO:function set default is All categories
+  useFocusEffect( 
+    React.useCallback(() => {
+      setSelectedCategory("All Categories")
+    },[])
+  )
   const handleCategoryClick = (categoryName) => {
     setSelectedCategory(
       categoryName === selectedCategory ? null : categoryName
@@ -73,7 +78,7 @@ const HomeScreen = ({ navigation }) => {
   console.log("bookmark", bookmark);
   return (
     <View style={styles.container}>
-      <View style={{ padding: 20, backgroundColor: appColor.whiteCard }}>
+      <View style={{ padding:20, backgroundColor: appColor.whiteCard }}>
         <FlatList
           data={[{ name: "All Categories" }, ...Categories]}
           horizontal
@@ -98,7 +103,7 @@ const HomeScreen = ({ navigation }) => {
           )}
         />
       </View>
-      <View style={{ marginBottom: 300 }}>
+      <View style={{flex:1,paddingBottom:50}}>
         <FlatList
           data={filteredItems}
           showsVerticalScrollIndicator={false}
@@ -144,19 +149,6 @@ const HomeScreen = ({ navigation }) => {
           )}
         />
       </View>
-      <Button
-        title="clear"
-        onPress={async () => {
-          try {
-            await AsyncStorage.removeItem("bookmarks");
-
-            console.log("Bookmarks cleared successfully.");
-            setBookmark([]);
-          } catch (error) {
-            console.error("Error clearing bookmarks:", error);
-          }
-        }}
-      />
     </View>
   );
 };
@@ -173,8 +165,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   container: {
-    marginTop: 10,
-    marginBottom:0
+    height:"auto",
+    marginTop:20,
+    flex:1,
+    marginBottom:12,
   },
   rowComponent: {
     padding: 10,
